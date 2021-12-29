@@ -23,42 +23,22 @@ export function getSortedPostsData() {
     // Combine the data with the id
     return {
       id,
-      ...matterResult.data,
+      ...(matterResult.data as { date: string; title: string }),
     };
   });
   // Sort posts by date
-  return allPostsData.sort(({ date: a }, { date: b }) => {
-    // 日付の降順でソートする
-    if (a < b) {
+  return allPostsData.sort((a, b) => {
+    if (a.date < b.date) {
       return 1;
-    } else if (a > b) {
-      return -1; // a を b より小さいインデックスにソートします
     } else {
-      return 0;
+      return -1;
     }
   });
 }
 
 export function getAllPostIds() {
   const fileNames = fs.readdirSync(postsDirectory);
-
-  // Returns an array that looks like this:
-  // [
-  //   {
-  //     params: {
-  //       id: 'ssg-ssr'
-  //     }
-  //   },
-  //   {
-  //     params: {
-  //       id: 'pre-rendering'
-  //     }
-  //   }
-  // ]
   return fileNames.map((fileName) => {
-    // 各オブジェクトは params キーを持ち、
-    // id キーを持つオブジェクトを含んでいなければなりません
-    // (ファイル名に [id] を使っているから)。
     return {
       params: {
         id: fileName.replace(/\.md$/, ""),
@@ -67,14 +47,14 @@ export function getAllPostIds() {
   });
 }
 
-export async function getPostData(id) {
+export async function getPostData(id: string) {
   const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
 
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents);
 
-  // remarkを使用して、マークダウンをHTML文字列に変換する
+  // Use remark to convert markdown into HTML string
   const processedContent = await remark()
     .use(html)
     .process(matterResult.content);
@@ -84,6 +64,6 @@ export async function getPostData(id) {
   return {
     id,
     contentHtml,
-    ...matterResult.data,
+    ...(matterResult.data as { date: string; title: string }),
   };
 }
