@@ -33,7 +33,7 @@ export default function Home({ allPostsData }: PropsType) {
 			</Head>
 
 			<section className={utilStyles.headingMd}>
-				<p>Takuma Sofue</p>
+				<p>機械学習とWeb開発してます</p>
 			</section>
 
 			<section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>

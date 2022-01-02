@@ -4,7 +4,7 @@ import Link from 'next/link';
 import utilStyles from '../styles/utils.module.css';
 import styles from './layout.module.css';
 
-const name = 'Nemutas';
+const name = 'Takuma Sofue';
 export const siteTitle = 'Next.js Sample Website';
 
 type PropsType = {
